@@ -1,0 +1,11 @@
+﻿global:
+  scrape_interval: 5s
+scrape_configs:
+  - job_name: apple-api
+    static_configs:
+      - targets:
+        - apple-api:5000
+  - job_name: banana-api
+    static_configs:
+      - targets:
+        - banana-api:5000

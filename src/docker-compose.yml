@@ -1,0 +1,53 @@
+﻿services:
+  apple-api:
+    image: apple-api
+    build:
+      context: ./FruitApi
+    environment:
+      - ASPNETCORE_HTTP_PORTS=5000
+    networks:
+      - common-net
+      
+  banana-api:
+    image: banana-api
+    build:
+      context: ./FruitApi
+    environment:
+      - ASPNETCORE_HTTP_PORTS=5000
+    networks:
+      - common-net
+  
+  request-generator:
+    image: request-generator
+    build:
+      context: ./RequestGenerator
+    networks:
+      - common-net
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - common-net
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - common-net
+
+volumes:
+  grafana-data:
+
+networks:
+  common-net:
